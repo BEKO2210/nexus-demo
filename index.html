@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS – AI-Automatisierung | Belkis Aslani</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Aurora Background */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(139, 92, 246, 0.1), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(99, 102, 241, 0.08), transparent);
+            animation: aurora 20s ease-in-out infinite;
+        }
+
+        @keyframes aurora {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(2%) translateY(-1%); }
+            50% { transform: translateX(-1%) translateY(2%); }
+            75% { transform: translateX(-2%) translateY(-1%); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.2rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 5% 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .gradient-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            min-height: 3.5rem;
+        }
+
+        .typewriter {
+            border-right: 2px solid var(--accent-primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { border-color: var(--accent-primary); }
+            51%, 100% { border-color: transparent; }
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .hero-cta:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 60px rgba(99, 102, 241, 0.5), 0 0 100px rgba(139, 92, 246, 0.3);
+        }
+
+        .hero-cta svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Floating Cards */
+        .floating-cards {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .float-card {
+            position: absolute;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .float-card:nth-child(1) {
+            top: 20%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .float-card:nth-child(2) {
+            top: 60%;
+            right: 5%;
+            animation-delay: -2s;
+        }
+
+        .float-card:nth-child(3) {
+            bottom: 20%;
+            left: 10%;
+            animation-delay: -4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .social-proof p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .social-proof strong {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+        }
+
+        .logo-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-item {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            filter: grayscale(100%);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .logo-item:hover {
+            filter: grayscale(0%);
+            color: var(--text-primary);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bento-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .bento-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 40px rgba(99, 102, 241, 0.1);
+        }
+
+        .bento-card.large {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 768px) {
+            .bento-card.large {
+                grid-column: span 1;
+            }
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .bento-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .bento-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 5%;
+            background: var(--bg-secondary);
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 2rem;
+            right: -1rem;
+            width: 2rem;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-primary), transparent);
+        }
+
+        @media (max-width: 768px) {
+            .step:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        .step-number {
+            width: 4rem;
+            height: 4rem;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 6rem 5%;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .quote-mark {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            opacity: 0.3;
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+        }
+
+        .author-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 5%;
+            background: var(--bg-secondary);
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-primary);
+        }
+
+        .toggle-knob {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(28px);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+
+        .pricing-card .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .pricing-card li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pricing-card li::before {
+            content: '✓';
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pricing-card.popular .pricing-cta {
+            background: var(--accent-gradient);
+            border: none;
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-2px);
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 6rem 5%;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s;
+        }
+
+        .faq-item.active .faq-answer {
+            grid-template-rows: 1fr;
+        }
+
+        .faq-answer-inner {
+            overflow: hidden;
+        }
+
+        .faq-answer p {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 6rem 5%;
+            background: var(--accent-gradient);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .final-cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .urgency {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .urgency::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .final-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 3rem;
+            background: white;
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .final-cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
+            .float-card {
+                display: none;
+            }
+
+            .steps {
+                flex-direction: column;
+            }
+
+            .step:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="aurora"></div>
+
+    <nav>
+        <div class="logo">NEXUS</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">So funktioniert's</a></li>
+            <li><a href="#pricing">Preise</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <button class="nav-cta">Demo starten</button>
+        <button class="mobile-menu-btn">☰</button>
+    </nav>
+
+    <section class="hero">
+        <div class="floating-cards">
+            <div class="float-card">🤖 AI-Powered</div>
+            <div class="float-card">⚡ 10x schneller</div>
+            <div class="float-card">🔒 Enterprise-Security</div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">Jetzt verfügbar – v2.0 Release</div>
+            <h1>Die Zukunft der <span class="gradient-text">Automatisierung</span></h1>
+            <p class="hero-subtitle"><span class="typewriter" id="typewriter"></span></p>
+            <a href="#pricing" class="hero-cta">
+                Demo starten
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <section class="social-proof">
+        <p>Vertraut von <strong>10.000+ Nutzern</strong> weltweit</p>
+        <div class="logo-bar">
+            <div class="logo-item">TechCorp</div>
+            <div class="logo-item">Innovate</div>
+            <div class="logo-item">FutureLabs</div>
+            <div class="logo-item">DataFlow</div>
+            <div class="logo-item">CloudNine</div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2>Alles, was du brauchst</h2>
+            <p>Leistungsstarke Features für moderne Unternehmen</p>
+        </div>
+        <div class="bento-grid">
+            <div class="bento-card large">
+                <div class="feature-icon">🧠</div>
+                <h3>AI-Engine</h3>
+                <p>State-of-the-Art KI-Modelle für intelligente Automatisierung. Lernt aus deinen Daten und optimiert sich kontinuierlich.</p>
+            </div>
+            <div class="bento-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Automation</h3>
+                <p>Automatisiere repetitive Aufgaben und spare bis zu 20 Stunden pro Woche.</p>
+            </div>
+            <div class="bento-card">
+                <div class="feature-icon">📊</div>
+                <h3>Analytics</h3>
+                <p>Echtzeit-Einblicke in alle Prozesse mit intelligenten Dashboards.</p>
+            </div>
+            <div class="bento-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Security</h3>
+                <p>Enterprise-Grade Sicherheit mit End-to-End-Verschlüsselung.</p>
+            </div>
+            <div class="bento-card">
+                <div class="feature-icon">🔌</div>
+                <h3>Integration</h3>
+                <p>Verbinde dich mit über 500+ Tools und Plattformen.</p>
+            </div>
+            <div class="bento-card large">
+                <div class="feature-icon">🎧</div>
+                <h3>24/7 Support</h3>
+                <p>Unser Team steht dir rund um die Uhr zur Verfügung. Durchschnittliche Antwortzeit unter 5 Minuten.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-header">
+            <h2>So funktioniert's</h2>
+            <p>In drei einfachen Schritten zur Automatisierung</p>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Connect</h3>
+                <p>Verbinde deine bestehenden Tools und Datenquellen in wenigen Klicks.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Automate</h3>
+                <p>Definiere Workflows oder lass unsere AI sie für dich erstellen.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Scale</h3>
+                <p>Wachse ohne Grenzen – unsere Infrastruktur skaliert mit dir.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-header">
+            <h2>Das sagen unsere Kunden</h2>
+            <p>Echte Erfahrungen von echten Nutzern</p>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="quote-mark">"</div>
+                <p class="testimonial-text">NEXUS hat unsere Produktivität um 300% gesteigert. Was früher Tage dauerte, erledigen wir jetzt in Stunden.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MK</div>
+                    <div class="author-info">
+                        <h4>Michael Keller</h4>
+                        <p>CEO, TechStart GmbH</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="quote-mark">"</div>
+                <p class="testimonial-text">Die beste Investition, die wir dieses Jahr getätigt haben. Der ROI war bereits nach 3 Wochen positiv.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SL</div>
+                    <div class="author-info">
+                        <h4>Sarah Lindner</h4>
+                        <p>COO, Innovate AG</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="quote-mark">"</div>
+                <p class="testimonial-text">Endlich eine KI-Lösung, die wirklich funktioniert. Intuitiv, schnell und zuverlässig.</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">TB</div>
+                    <div class="author-info">
+                        <h4>Thomas Berg</h4>
+                        <p>CTO, DataFlow Solutions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <h2>Transparente Preise</h2>
+            <p>Wähle den Plan, der zu dir passt</p>
+        </div>
+        <div class="pricing-toggle">
+            <span>Monatlich</span>
+            <div class="toggle-switch" id="pricingToggle">
+                <div class="toggle-knob"></div>
+            </div>
+            <span>Jährlich <strong>(20% sparen)</strong></span>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Starter</h3>
+                <div class="price" data-monthly="0" data-yearly="0">€0<span>/Monat</span></div>
+                <ul>
+                    <li>Bis zu 100 Automatisierungen</li>
+                    <li>5 Integrationen</li>
+                    <li>Basis-Analytics</li>
+                    <li>E-Mail Support</li>
+                </ul>
+                <button class="pricing-cta">Kostenlos starten</button>
+            </div>
+            <div class="pricing-card popular">
+                <div class="popular-badge">Beliebteste</div>
+                <h3>Professional</h3>
+                <div class="price" data-monthly="49" data-yearly="39">€49<span>/Monat</span></div>
+                <ul>
+                    <li>Unbegrenzte Automatisierungen</li>
+                    <li>50+ Integrationen</li>
+                    <li>Erweiterte Analytics</li>
+                    <li>Prioritäts-Support</li>
+                    <li>Team-Kollaboration</li>
+                </ul>
+                <button class="pricing-cta">Jetzt buchen</button>
+            </div>
+            <div class="pricing-card">
+                <h3>Enterprise</h3>
+                <div class="price" data-monthly="199" data-yearly="159">€199<span>/Monat</span></div>
+                <ul>
+                    <li>Alles aus Professional</li>
+                    <li>Dedizierter Account Manager</li>
+                    <li>Custom Integrationen</li>
+                    <li>SLA-Garantie</li>
+                    <li>On-Premise Option</li>
+                </ul>
+                <button class="pricing-cta">Kontaktieren</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <div class="section-header">
+            <h2>Häufige Fragen</h2>
+            <p>Alles, was du wissen musst</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    Wie lange dauert die Einrichtung?
+                    <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Die meisten Nutzer sind innerhalb von 15 Minuten einsatzbereit. Unser Onboarding-Prozess führt dich Schritt für Schritt durch die Einrichtung.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    Kann ich jederzeit kündigen?
+                    <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Ja, absolut. Bei monatlichen Plänen kannst du jederzeit kündigen. Bei jährlichen Plänen erstattet wir den ungenutzten Zeitraum anteilig.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    Ist meine Daten sicher?
+                    <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Deine Daten sind bei uns in besten Händen. Wir verwenden End-to-End-Verschlüsselung, sind GDPR-konform und ISO 27001 zertifiziert.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    Gibt es eine API?
+                    <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Ja, unsere REST-API ist in allen Plänen verfügbar. Enterprise-Kunden erhalten zusätzlich Zugriff auf unsere Webhook-Integration.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    Wie ist der Support erreichbar?
+                    <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Unser Support-Team ist 24/7 per Chat und E-Mail erreichbar. Professional- und Enterprise-Kunden haben zusätzlich Zugriff auf Telefon-Support.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="final-cta-content">
+            <div class="urgency">Nur noch 47 Plätze verfügbar</div>
+            <h2>Bereit für die Zukunft?</h2>
+            <p>Starte jetzt deine kostenlose Demo und erlebe die Kraft der Automatisierung.</p>
+            <a href="#pricing" class="final-cta-btn">
+                Demo starten
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">NEXUS</div>
+            <div class="footer-links">
+                <a href="#">Impressum</a>
+                <a href="#">Datenschutz</a>
+                <a href="#">AGB</a>
+                <a href="#">Kontakt</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-icon">𝕏</a>
+                <a href="#" class="social-icon">in</a>
+                <a href="#" class="social-icon">📧</a>
+            </div>
+            <p>© 2026 NEXUS by Belkis Aslani. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Typewriter Effect
+        const text = "Automatisiere deine Workflows. Spare Zeit. Skaliere dein Business.";
+        const typewriter = document.getElementById('typewriter');
+        let i = 0;
+
+        function type() {
+            if (i < text.length) {
+                typewriter.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, 50);
+            }
+        }
+        setTimeout(type, 500);
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.bento-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked if wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Pricing Toggle
+        const pricingToggle = document.getElementById('pricingToggle');
+        const prices = document.querySelectorAll('.price');
+        let isYearly = false;
+
+        pricingToggle.addEventListener('click', () => {
+            isYearly = !isYearly;
+            pricingToggle.classList.toggle('active');
+            
+            prices.forEach(price => {
+                const monthly = price.dataset.monthly;
+                const yearly = price.dataset.yearly;
+                price.innerHTML = `€${isYearly ? yearly : monthly}<span>/Monat</span>`;
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Button click handlers
+        document.querySelectorAll('button').forEach(btn => {
+            if (!btn.classList.contains('faq-question') && !btn.id) {
+                btn.addEventListener('click', () => {
+                    alert('Demo-Anfrage gesendet! Wir melden uns bei dir.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
